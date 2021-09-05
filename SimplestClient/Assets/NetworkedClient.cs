@@ -17,9 +17,6 @@ public class NetworkedClient : MonoBehaviour
     bool isConnected = false;
     int ourClientID;
 
-    const bool connectToFernando = true;
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -82,11 +79,7 @@ public class NetworkedClient : MonoBehaviour
             hostID = NetworkTransport.AddHost(topology, 0);
             Debug.Log("Socket open.  Host ID = " + hostID);
 
-
-            if(connectToFernando)
-                connectionID = NetworkTransport.Connect(hostID, "142.112.20.199", socketPort, 0, out error);  //  server is not local
-            else
-                connectionID = NetworkTransport.Connect(hostID, "192.168.2.22", socketPort, 0, out error); // server is local on network
+            connectionID = NetworkTransport.Connect(hostID, "192.168.2.37", socketPort, 0, out error); // server is local on network
 
             if (error == 0)
             {
