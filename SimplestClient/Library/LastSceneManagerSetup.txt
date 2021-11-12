@@ -1,5 +1,0 @@
-sceneSetups:
-- path: C:/Users/GamerTech/Desktop/MultiplayerClass/StreamingDataLab-main/StreamingDataLab-main/StreamingDataLab/Assets/Scenes/SampleScene.unity
-  isLoaded: 1
-  isActive: 1
-  isSubScene: 0
