@@ -20,6 +20,12 @@ public class GameSystemManger : MonoBehaviour
 
     GameObject ticTacToeSquareButton;
 
+    GameObject quitButton;
+
+    GameObject gameCanvas;
+
+    GameObject menuCanvas;
+
     //static GameObject instance;
     // Start is called before the first frame update
     void Start()
@@ -51,6 +57,12 @@ public class GameSystemManger : MonoBehaviour
                 textPasswordInfo = go;
                 else if(go.name == "TicTacToeSquareButton")
                 ticTacToeSquareButton = go;
+                 else if(go.name == "QuitButton")
+                quitButton = go;
+                else if(go.name == "GameCanvas")
+                gameCanvas = go;
+                else if(go.name == "MenuCanvas")
+                menuCanvas = go;
 
 
 
@@ -65,7 +77,9 @@ public class GameSystemManger : MonoBehaviour
 
         joinGameRoomButton.GetComponent<Button>().onClick.AddListener(JoinGameRoomButtonPressed);
 
-        ticTacToeSquareButton.GetComponent<Button>().onClick.AddListener(JoinGameRoomButtonPressed);
+        ticTacToeSquareButton.GetComponent<Button>().onClick.AddListener(TicTacToeSquareButtonPressed);
+
+        quitButton.GetComponent<Button>().onClick.AddListener(QuitButtonPressed);
         
 
         ChangeState(GameStates.LoginMenu);
@@ -121,36 +135,59 @@ public class GameSystemManger : MonoBehaviour
         passwordInput.SetActive(false);
         createToggle.SetActive(false);
         loginToggle.SetActive(false);
-
         textNameInfo.SetActive(false);
         textPasswordInfo.SetActive(false);
-
-         joinGameRoomButton.SetActive(false);
-         ticTacToeSquareButton.SetActive(false);
+        joinGameRoomButton.SetActive(false);
+        ticTacToeSquareButton.SetActive(false);
+        quitButton.SetActive(false);
+        gameCanvas.SetActive(false);
+        menuCanvas.SetActive(true);
 
         if(newState == GameStates.LoginMenu)
         {
             submitButton.SetActive(true);
-        userNameInput.SetActive(true);
-        passwordInput.SetActive(true);
-        createToggle.SetActive(true);
-        loginToggle.SetActive(true);
+            userNameInput.SetActive(true);
+            passwordInput.SetActive(true);
+            createToggle.SetActive(true);
+            loginToggle.SetActive(true);
+            menuCanvas.SetActive(true);
 
-        textNameInfo.SetActive(true);
-        textPasswordInfo.SetActive(true);
-        ticTacToeSquareButton.SetActive(false);
+            textNameInfo.SetActive(true);
+            textPasswordInfo.SetActive(true);
+            ticTacToeSquareButton.SetActive(false);
         }
         else if(newState == GameStates.MainMenu)
         {
+            quitButton.SetActive(true);
             joinGameRoomButton.SetActive(true);
+            menuCanvas.SetActive(true);
         }
         else if(newState == GameStates.WaitingInQueueForOtherPlayer)
         {
+             quitButton.SetActive(true);
+             ticTacToeSquareButton.SetActive(true);
+             menuCanvas.SetActive(true);
             //joinGameRoomButton.SetActive(true);
         }
         else if(newState == GameStates.TicTacToe)
         {
             ticTacToeSquareButton.SetActive(true);
+            quitButton.SetActive(true);
+            gameCanvas.SetActive(true);
+
+           
+            joinGameRoomButton.SetActive(false);
+            submitButton.SetActive(false);
+            userNameInput.SetActive(false);
+            passwordInput.SetActive(false);
+            createToggle.SetActive(false);
+            loginToggle.SetActive(false);
+
+            textNameInfo.SetActive(false);
+            textPasswordInfo.SetActive(false);
+
+            joinGameRoomButton.SetActive(false);
+            ticTacToeSquareButton.SetActive(false);
         }
         
     }
@@ -165,10 +202,16 @@ public class GameSystemManger : MonoBehaviour
     public void TicTacToeSquareButtonPressed()
     {
         networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.JoinQueueForGameRoom + "");
-
+        ChangeState(GameStates.TicTacToe);
         // networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.JoinQueueForGameRoom + "");
         // ChangeState(GameStates.WaitingInQueueForOtherPlayer);
         
+    }
+
+    public void QuitButtonPressed() 
+    {
+        
+        ChangeState(GameStates.LoginMenu);
     }
 
     static public class GameStates
