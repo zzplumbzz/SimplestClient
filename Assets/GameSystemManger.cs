@@ -22,9 +22,11 @@ public class GameSystemManger : MonoBehaviour
 
     GameObject quitButton;
 
-    GameObject gameCanvas;
+    //GameObject gameCanvas;
 
     GameObject menuCanvas;
+
+    GameObject board;
 
     //static GameObject instance;
     // Start is called before the first frame update
@@ -59,10 +61,12 @@ public class GameSystemManger : MonoBehaviour
                 ticTacToeSquareButton = go;
                  else if(go.name == "QuitButton")
                 quitButton = go;
-                else if(go.name == "GameCanvas")
-                gameCanvas = go;
+                // else if(go.name == "GameCanvas")
+                // gameCanvas = go;
                 else if(go.name == "MenuCanvas")
                 menuCanvas = go;
+                else if(go.name == "Board")
+                board = go;
 
 
 
@@ -140,8 +144,9 @@ public class GameSystemManger : MonoBehaviour
         joinGameRoomButton.SetActive(false);
         ticTacToeSquareButton.SetActive(false);
         quitButton.SetActive(false);
-        gameCanvas.SetActive(false);
+        //gameCanvas.SetActive(false);
         menuCanvas.SetActive(true);
+        board.SetActive(false);
 
         if(newState == GameStates.LoginMenu)
         {
@@ -173,7 +178,8 @@ public class GameSystemManger : MonoBehaviour
         {
             ticTacToeSquareButton.SetActive(true);
             quitButton.SetActive(true);
-            gameCanvas.SetActive(true);
+            //gameCanvas.SetActive(true);
+            board.SetActive(true);
 
            
             joinGameRoomButton.SetActive(false);
