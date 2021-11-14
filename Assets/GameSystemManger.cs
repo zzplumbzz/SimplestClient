@@ -28,6 +28,10 @@ public class GameSystemManger : MonoBehaviour
 
     GameObject board;
 
+    GameObject HelloCB;
+    GameObject GGCB;
+    
+
     //static GameObject instance;
     // Start is called before the first frame update
     void Start()
@@ -67,7 +71,10 @@ public class GameSystemManger : MonoBehaviour
                 menuCanvas = go;
                 else if(go.name == "Board")
                 board = go;
-
+                 else if(go.name == "HelloButton")
+                HelloCB = go;
+                 else if(go.name == "GGButton")
+                GGCB = go;
 
 
                 
@@ -84,7 +91,8 @@ public class GameSystemManger : MonoBehaviour
         ticTacToeSquareButton.GetComponent<Button>().onClick.AddListener(TicTacToeSquareButtonPressed);
 
         quitButton.GetComponent<Button>().onClick.AddListener(QuitButtonPressed);
-        
+        HelloCB.GetComponent<Button>().onClick.AddListener(HelloCBPressed);
+        GGCB.GetComponent<Button>().onClick.AddListener(GGCBPressed);
 
         ChangeState(GameStates.LoginMenu);
      
@@ -147,6 +155,8 @@ public class GameSystemManger : MonoBehaviour
         //gameCanvas.SetActive(false);
         menuCanvas.SetActive(true);
         board.SetActive(false);
+        HelloCB.SetActive(false);
+        GGCB.SetActive(false);
 
         if(newState == GameStates.LoginMenu)
         {
@@ -180,6 +190,8 @@ public class GameSystemManger : MonoBehaviour
             quitButton.SetActive(true);
             //gameCanvas.SetActive(true);
             board.SetActive(true);
+            GGCB.SetActive(true);
+            HelloCB.SetActive(true);
 
            
             joinGameRoomButton.SetActive(false);
@@ -219,6 +231,21 @@ public class GameSystemManger : MonoBehaviour
         
         ChangeState(GameStates.LoginMenu);
     }
+    public void HelloCBPressed() 
+    {
+        Debug.Log("Hello");
+        //networkedClient.GetComponent<NetworkedClient>().SendMessageToClient(ClientToServerSignifiers.SendMessageToClient + "Hello");
+        
+    }
+
+    public void GGCBPressed() 
+    {
+       // networkedClient.GetComponent<NetworkedClient>().SendMessageToClient(ClientToServerSignifiers.SendMessageToClient + "Good Game!");
+        Debug.Log("Good Game!");
+        
+    }
+
+
 
     static public class GameStates
     {
