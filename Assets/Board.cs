@@ -1,9 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class Board : MonoBehaviour
 {
+
+    public NetworkedClient nc;
+    LinkedList<MovesDone> movesDone;
+
+    const int AllMovesDone = 9;
+    string movesDoneFilePath;
+     public GameSystemManger GSMScript;
+     public Box box;
+
     [Header("Input Settings: ")]
     [SerializeField] private LayerMask boxesLayerMask;
     [SerializeField] private float touchRadius;
@@ -23,6 +33,7 @@ public class Board : MonoBehaviour
 
     private void Start()
     {
+        movesDoneFilePath = Application.dataPath + Path.DirectorySeparatorChar + "MovesDone.txt";
         cam = Camera.main;
 
         currentMark = Mark.X;
@@ -34,13 +45,18 @@ public class Board : MonoBehaviour
     {
         if(Input.GetMouseButtonUp (0))
         {
+            
             Vector2 touchPosition = cam.ScreenToWorldPoint (Input.mousePosition);
 
             Collider2D hit = Physics2D.OverlapCircle(touchPosition, touchRadius, boxesLayerMask);
 
             if(hit)
             HitBox(hit.GetComponent<Box>());
+            
+            
         }
+
+        
     }
 
     private void HitBox(Box box)
@@ -54,15 +70,21 @@ public class Board : MonoBehaviour
             bool won = CheckIfWin();
             if(won)
             {
+                //GSMScript.ChangeState(newState: 6);
+            
                 Debug.Log(currentMark.ToString() + "Wins");
+                
                 return;
+                
             }
 
             SwitchPlayer();
         }
     }
 
-     private bool CheckIfWin()
+   
+
+     public bool CheckIfWin()
     {
         return
         AreBoxesMatched(0, 1, 2) || AreBoxesMatched(3, 4, 5) || AreBoxesMatched(6, 7, 8) ||
@@ -75,12 +97,17 @@ public class Board : MonoBehaviour
         Mark m = currentMark;
         bool matched = (marks[i] == m && marks[j] == m && marks[k] == m);
 
-        return matched;
+        
+
+        
+
+        return matched; 
     }
 
     private void SwitchPlayer()
     {
         currentMark = (currentMark == Mark.X) ? Mark.O : Mark.X;
+       
     }
 
     private Color GetColor()
@@ -92,4 +119,67 @@ public class Board : MonoBehaviour
     {
         return (currentMark == Mark.X) ? spriteX : spriteO;
     }
+
+    public class MovesDone
+    {
+        public int moves;
+        public int marks;
+
+        public MovesDone(int Moves)
+        {
+            marks = Moves;
+
+        }
+    }
+
+    public void SaveMovesDone()
+    {
+
+        
+        StreamWriter sw = new StreamWriter(movesDoneFilePath);
+
+        foreach(MovesDone mo in movesDone)
+            {
+                sw.WriteLine(AllMovesDone + "," + mo.moves);
+            }
+            sw.Close();
+    }
+
+    // public void LoadMovesDone()
+    //     {
+
+    //         if(File.Exists(movesDoneFilePath))
+    //         {
+
+            
+
+    //         StreamReader sr = new StreamReader(movesDoneFilePath);
+
+    //         string line;
+
+    //             while(true)
+    //             {
+    //                 line = sr.ReadLine();
+    //                 if(line == null)
+    //                 break;
+    //                 string[] csv = line.Split(',');
+
+    //                 int signifier = int.Parse(csv[0]);
+
+    //                 if(signifier == AllMovesDone)
+    //                 {
+    //                     MovesDone mo = new MovesDone();
+    //                     movesDone.AddLast(mo);
+    //                 }
+    //                 /*else if(signifier == )
+    //                 {
+                        
+    //                 }*/
+    //             }
+    //             sr.Close();
+    //         }
+
+    //     }
+
+
 }

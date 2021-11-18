@@ -25,7 +25,7 @@ public class NetworkedClient : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        Debug.Log("NetworkedClient start/ is connected");
         GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
 
         foreach(GameObject go in allObjects)
@@ -80,7 +80,7 @@ public class NetworkedClient : MonoBehaviour
     
     private void Connect()
     {
-
+        Debug.Log("Network client connect");
         if (!isConnected)
         {
             Debug.Log("Attempting to create connection");
@@ -107,12 +107,12 @@ public class NetworkedClient : MonoBehaviour
     }
     
     public void Disconnect()
-    {
+    {Debug.Log("Disconnected()");
         NetworkTransport.Disconnect(hostID, connectionID, out error);
     }
     
     public void SendMessageToHost(string msg)
-    {
+    {Debug.Log("Send message to host()");
         byte[] buffer = Encoding.Unicode.GetBytes(msg);
         NetworkTransport.Send(hostID, connectionID, reliableChannelID, buffer, msg.Length * sizeof(char), out error);
     }
@@ -126,26 +126,45 @@ public class NetworkedClient : MonoBehaviour
         int signifier = int.Parse(csv[0]);
 
         if(signifier == ServerToClientSignifiers.AccountCreationComplete)
-        {
+        {Debug.Log("Account creation complete NC");
             gameSystemManger.GetComponent<GameSystemManger>().ChangeState(GameSystemManger.GameStates.MainMenu);
         }
         else if(signifier == ServerToClientSignifiers.LoginComplete)
         {
-            gameSystemManger.GetComponent<GameSystemManger>().ChangeState(GameSystemManger.GameStates.MainMenu);
+            Debug.Log("Log Comp NC");
+            gameSystemManger.GetComponent<GameSystemManger>().ChangeState(GameSystemManger.GameStates.MainMenu);//was MainMenu
+            
         }
-         else if(signifier == ServerToClientSignifiers.GameStart)
+        else if(signifier == ServerToClientSignifiers.GameStart)//////////////////////////////////////////possible trash
         {
+            Debug.Log("queue");
+            gameSystemManger.GetComponent<GameSystemManger>().ChangeState(GameSystemManger.GameStates.WaitingInQueueForOtherPlayer);//was MainMenu
+            
+        }//////////////////////////////////////////////////////////
+        else if(signifier == ServerToClientSignifiers.GameStart)
+        {
+            Debug.Log("Deed");
             gameSystemManger.GetComponent<GameSystemManger>().ChangeState(GameSystemManger.GameStates.TicTacToe);
         }
-           else if(signifier == ServerToClientSignifiers.OpponentPlay)
+        else if(signifier == ServerToClientSignifiers.OpponentPlay)
         {
-            Debug.Log("Opponent Play!");
+             Debug.Log("Opponent Play!");
         }
+
+        // if(signifier == ClientToClientSignifiers.Hello)
+        // {
+        //      Debug.Log("Player Says Hello!");
+        // }
+        // else if(signifier == ClientToClientSignifiers.GoodGame)
+        // {
+        //      Debug.Log("Player Says Good Game!");
+        // }
+
 
     }
 
     public bool IsConnected()
-    {
+    {Debug.Log("IS Connected NC");
         return isConnected;
     }
 
@@ -163,7 +182,7 @@ public static class ClientToServerSignifiers
 
     public const int TicTacToePlay = 4;
 
-    
+    public const int OpponentPlay = 5;
 
 
 }
@@ -182,3 +201,10 @@ public const int OpponentPlay = 5;
 public const int GameStart = 6;
 
 }
+
+// public static class ClientToClientSignifiers
+// {
+//     public const int Hello = 1;
+
+//     public const int GoodGame = 2;
+// }
