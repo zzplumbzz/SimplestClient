@@ -25,8 +25,6 @@ public class GameSystemManger : MonoBehaviour
 
     GameObject quitButton;
 
-    //GameObject gameCanvas;
-
     GameObject menuCanvas;
 
     GameObject board;
@@ -41,11 +39,11 @@ public class GameSystemManger : MonoBehaviour
     
     
 
-    //static GameObject instance;
+    
     // Start is called before the first frame update
     void Start()
     {
-        //instance = this.gameObject;
+        
 
         GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
 
@@ -74,8 +72,6 @@ public class GameSystemManger : MonoBehaviour
                 ticTacToeSquareButton = go;
                  else if(go.name == "QuitButton")
                 quitButton = go;
-                // else if(go.name == "GameCanvas")
-                // gameCanvas = go;
                 else if(go.name == "MenuCanvas")
                 menuCanvas = go;
                 else if(go.name == "Board")
@@ -108,21 +104,31 @@ public class GameSystemManger : MonoBehaviour
         GGCB.GetComponent<Button>().onClick.AddListener(GGCBPressed);
         ReplayButton.GetComponent<Button>().onClick.AddListener(ReplayButtonPressed);
 
-        ChangeState(GameStates.LoginMenu);
+        ChangeState(GameStates.Login);
      
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.A))
+        ChangeState(GameStates.MainMenu);
+
+        if(Input.GetKeyDown(KeyCode.S))
+        ChangeState(GameStates.Login);
+
+        if(Input.GetKeyDown(KeyCode.D))
+        ChangeState(GameStates.WaitingForMatch);
+
+        if(Input.GetKeyDown(KeyCode.F))
+        ChangeState(GameStates.TicTacToe);
     }
 
     public void SubmitButtonPressed()
-    {Debug.Log("Submit button pressed");
+    {
+        Debug.Log("Submit button pressed");
 
         string p = passwordInput.GetComponent<InputField>().text;
-
         string n = userNameInput.GetComponent<InputField>().text;
 
         string msg;
@@ -136,40 +142,35 @@ public class GameSystemManger : MonoBehaviour
 
         Debug.Log(msg); 
 
+        //ChangeState(GameStates.WaitingForMatch);
         
     }
 
-    public void LoginToggleChanged(bool newValue){
+    private void LoginToggleChanged(bool newValue)
+    {
         Debug.Log("Login Toggle");
 
         createToggle.GetComponent<Toggle>().SetIsOnWithoutNotify(!newValue);
 
     }
 
-    public void CreateToggleChanged(bool newValue){
+    private void CreateToggleChanged(bool newValue)
+    {
         Debug.Log("create Toggle");
         loginToggle.GetComponent<Toggle>().SetIsOnWithoutNotify(!newValue);
 
 
     }
 
-    public void JoinGameRoomButtonPressed()
+    private void JoinGameRoomButtonPressed()
     {
             Debug.Log("Joining Queue button pressed");
         networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.JoinQueueForGameRoom + "");
         
-        ChangeState(GameStates.WaitingInQueueForOtherPlayer);
+        ChangeState(GameStates.WaitingForMatch);
         
     }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // public void WaitingInQueueForOtherPlayer()
-    // {
-    //     networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacToePlay + "");
-    //     ChangeState(GameStates.TicTacToe);
-        
-    // }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public void TicTacToeSquareButtonPressed()
+    private void TicTacToeSquareButtonPressed()
     {
         Debug.Log("Tic tac toe button pressed");
         networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacToePlay + "");
@@ -182,7 +183,7 @@ public class GameSystemManger : MonoBehaviour
     public void QuitButtonPressed() 
     {
         
-        ChangeState(GameStates.LoginMenu);
+        ChangeState(GameStates.Login);
     }
     public void HelloCBPressed() 
     {
@@ -216,7 +217,6 @@ public class GameSystemManger : MonoBehaviour
         joinGameRoomButton.SetActive(false);
         ticTacToeSquareButton.SetActive(false);
         quitButton.SetActive(false);
-        //gameCanvas.SetActive(false);
         menuCanvas.SetActive(false);
         board.SetActive(false);
         box.SetActive(false);
@@ -225,32 +225,34 @@ public class GameSystemManger : MonoBehaviour
         ReplayButton.SetActive(false);
 
 
-        if(newState == GameStates.LoginMenu)
-        {Debug.Log("Login menu state");
+        if(newState == GameStates.Login)
+        {
+            Debug.Log("Login menu state");
+
             submitButton.SetActive(true);
             userNameInput.SetActive(true);
             passwordInput.SetActive(true);
             createToggle.SetActive(true);
             loginToggle.SetActive(true);
             menuCanvas.SetActive(true);
-
             textNameInfo.SetActive(true);
             textPasswordInfo.SetActive(true);
             
         }
         else if(newState == GameStates.MainMenu)
-        {Debug.Log("Main menu state");
+        {
+            Debug.Log("Main menu state");
             quitButton.SetActive(true);
             joinGameRoomButton.SetActive(true);
             menuCanvas.SetActive(true);
         }
-        else if(newState == GameStates.WaitingInQueueForOtherPlayer)
+        else if(newState == GameStates.WaitingForMatch)
         {
             
             Debug.Log("In Queue state");
-             quitButton.SetActive(true);
+            quitButton.SetActive(true);
+            //joinGameRoomButton.SetActive(true);
              
-             //menuCanvas.SetActive(false);
 
             
             
@@ -286,7 +288,6 @@ public class GameSystemManger : MonoBehaviour
             ticTacToeSquareButton.SetActive(false);
             joinGameRoomButton.SetActive(false);
             quitButton.SetActive(true);
-            //gameCanvas.SetActive(true);
             board.SetActive(true);
             box.SetActive(true);
             GGCB.SetActive(true);
@@ -300,7 +301,6 @@ public class GameSystemManger : MonoBehaviour
         {
             
             quitButton.SetActive(true);
-            //gameCanvas.SetActive(true);
             board.SetActive(false);
             box.SetActive(false);
             GGCB.SetActive(true);
@@ -324,21 +324,23 @@ public class GameSystemManger : MonoBehaviour
         }
         
     }
-
+}
      
 
     
 
-    static public class GameStates
-    {
-        public const int LoginMenu = 1;
-        public const int MainMenu = 2;
-        public const int WaitingInQueueForOtherPlayer = 3;
-        public const int TicTacToe = 4;
 
-         public const int OpponentPlay = 5;
+    
 
-         public const int Win = 6;
-    }
 
+
+
+static public class GameStates
+{
+    public const int Login = 1;
+    public const int MainMenu = 2;
+    public const int WaitingForMatch = 3;
+    public const int TicTacToe = 4;
+    public const int OpponentPlay = 5;
+    public const int Win = 6;
 }

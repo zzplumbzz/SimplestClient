@@ -19,7 +19,7 @@ public class NetworkedClient : MonoBehaviour
     bool isConnected = false;
     int ourClientID;
 
-    public GameObject gameSystemManger;
+    GameObject gameSystemManger;
     
 
     // Start is called before the first frame update
@@ -126,39 +126,27 @@ public class NetworkedClient : MonoBehaviour
         int signifier = int.Parse(csv[0]);
 
         if(signifier == ServerToClientSignifiers.AccountCreationComplete)
-        {Debug.Log("Account creation complete NC");
-            gameSystemManger.GetComponent<GameSystemManger>().ChangeState(GameSystemManger.GameStates.MainMenu);
+        {
+            Debug.Log("Account creation complete NC");
+            gameSystemManger.GetComponent<GameSystemManger>().ChangeState(GameStates.MainMenu);
         }
         else if(signifier == ServerToClientSignifiers.LoginComplete)
         {
             Debug.Log("Log Comp NC");
-            gameSystemManger.GetComponent<GameSystemManger>().ChangeState(GameSystemManger.GameStates.MainMenu);//was MainMenu
+            gameSystemManger.GetComponent<GameSystemManger>().ChangeState(GameStates.MainMenu);
             
         }
-        else if(signifier == ServerToClientSignifiers.GameStart)//////////////////////////////////////////possible trash
-        {
-            Debug.Log("queue");
-            gameSystemManger.GetComponent<GameSystemManger>().ChangeState(GameSystemManger.GameStates.WaitingInQueueForOtherPlayer);//was MainMenu
-            
-        }//////////////////////////////////////////////////////////
         else if(signifier == ServerToClientSignifiers.GameStart)
         {
-            Debug.Log("Deed");
-            gameSystemManger.GetComponent<GameSystemManger>().ChangeState(GameSystemManger.GameStates.TicTacToe);
+            Debug.Log("GAME FINALLY STARTED!!!!!!!!!!!!!!!!!!!!!!!!");
+            gameSystemManger.GetComponent<GameSystemManger>().ChangeState(GameStates.TicTacToe);
         }
         else if(signifier == ServerToClientSignifiers.OpponentPlay)
         {
              Debug.Log("Opponent Play!");
         }
 
-        // if(signifier == ClientToClientSignifiers.Hello)
-        // {
-        //      Debug.Log("Player Says Hello!");
-        // }
-        // else if(signifier == ClientToClientSignifiers.GoodGame)
-        // {
-        //      Debug.Log("Player Says Good Game!");
-        // }
+       
 
 
     }
@@ -169,8 +157,8 @@ public class NetworkedClient : MonoBehaviour
     }
 
 
-}
 
+}
 
 public static class ClientToServerSignifiers
 {
@@ -182,29 +170,31 @@ public static class ClientToServerSignifiers
 
     public const int TicTacToePlay = 4;
 
-    public const int OpponentPlay = 5;
+    //public const int OpponentPlay = 5;
 
 
 }
 
 public static class ServerToClientSignifiers
 {
-    public const int LoginComplete = 1;
-     public const int LoginFailed = 2;
+    public const int LoginComplete = 11;
+     public const int LoginFailed = 12;
     
 
-    public const int AccountCreationComplete = 3;
-    public const int AccountCreationFailed = 4;
+    public const int AccountCreationComplete = 13;
+    public const int AccountCreationFailed = 14;
 
-public const int OpponentPlay = 5;
+public const int OpponentPlay = 15;
 
-public const int GameStart = 6;
+public const int GameStart = 16;
 
 }
 
-// public static class ClientToClientSignifiers
+// public static class LoginResponses
 // {
-//     public const int Hello = 1;
-
-//     public const int GoodGame = 2;
+//     public const int Success = 21;
+//      public const int FailureNameInuse = 22;
+//     public const int FailureNameNotFound = 23;
+//     public const int FailureIncorrectPassword = 24;
 // }
+
