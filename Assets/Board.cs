@@ -70,7 +70,7 @@ public class Board : MonoBehaviour
             bool won = CheckIfWin();
             if(won)
             {
-                //GSMScript.ChangeState(newState: 6);
+                GSMScript.ChangeState(newState: 6);
             
                 Debug.Log(currentMark.ToString() + "Wins");
                 
@@ -104,7 +104,7 @@ public class Board : MonoBehaviour
         return matched; 
     }
 
-    private void SwitchPlayer()
+    public void SwitchPlayer()
     {
         currentMark = (currentMark == Mark.X) ? Mark.O : Mark.X;
        

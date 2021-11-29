@@ -9,7 +9,7 @@ using System.IO;
 
 public class GameSystemManger : MonoBehaviour
 {
-     
+
     public Board boardScript;
     public Box boxScript;
 
@@ -36,57 +36,57 @@ public class GameSystemManger : MonoBehaviour
 
     GameObject ReplayButton;
 
-    
-    
 
-    
+
+
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
 
         GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
 
 
-        foreach(GameObject go in allObjects)
+        foreach (GameObject go in allObjects)
         {
-            if(go.name =="UserNameInput")
+            if (go.name == "UserNameInput")
                 userNameInput = go;
-            else if(go.name == "PasswordInput")
+            else if (go.name == "PasswordInput")
                 passwordInput = go;
-            else if(go.name == "SubmitButton")
+            else if (go.name == "SubmitButton")
                 submitButton = go;
-            else if(go.name == "LoginToggle")
+            else if (go.name == "LoginToggle")
                 loginToggle = go;
-            else if(go.name == "CreateToggle")
+            else if (go.name == "CreateToggle")
                 createToggle = go;
-            else if(go.name == "NetworkedClient")
+            else if (go.name == "NetworkedClient")
                 networkedClient = go;
-            else if(go.name == "JoinGameRoomButton")
+            else if (go.name == "JoinGameRoomButton")
                 joinGameRoomButton = go;
-                else if(go.name == "UserName")
+            else if (go.name == "UserName")
                 textNameInfo = go;
-                else if(go.name == "Password")
+            else if (go.name == "Password")
                 textPasswordInfo = go;
-                else if(go.name == "TicTacToeSquareButton")
+            else if (go.name == "TicTacToeSquareButton")
                 ticTacToeSquareButton = go;
-                 else if(go.name == "QuitButton")
+            else if (go.name == "QuitButton")
                 quitButton = go;
-                else if(go.name == "MenuCanvas")
+            else if (go.name == "MenuCanvas")
                 menuCanvas = go;
-                else if(go.name == "Board")
+            else if (go.name == "Board")
                 board = go;
-                else if(go.name == "Box")
+            else if (go.name == "Box")
                 box = go;
-                 else if(go.name == "HelloButton")
+            else if (go.name == "HelloButton")
                 HelloCB = go;
-                 else if(go.name == "GGButton")
+            else if (go.name == "GGButton")
                 GGCB = go;
-                else if(go.name == "ReplayButton")
+            else if (go.name == "ReplayButton")
                 ReplayButton = go;
 
 
-                
+
         }
 
         submitButton.GetComponent<Button>().onClick.AddListener(SubmitButtonPressed);
@@ -105,23 +105,23 @@ public class GameSystemManger : MonoBehaviour
         ReplayButton.GetComponent<Button>().onClick.AddListener(ReplayButtonPressed);
 
         ChangeState(GameStates.Login);
-     
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.A))
-        ChangeState(GameStates.MainMenu);
+        // if (Input.GetKeyDown(KeyCode.A))
+        //     ChangeState(GameStates.MainMenu);
 
-        if(Input.GetKeyDown(KeyCode.S))
-        ChangeState(GameStates.Login);
+        // if (Input.GetKeyDown(KeyCode.S))
+        //     ChangeState(GameStates.Login);
 
-        if(Input.GetKeyDown(KeyCode.D))
-        ChangeState(GameStates.WaitingForMatch);
+        // if (Input.GetKeyDown(KeyCode.D))
+        //     ChangeState(GameStates.WaitingForMatch);
 
-        if(Input.GetKeyDown(KeyCode.F))
-        ChangeState(GameStates.TicTacToe);
+        // if (Input.GetKeyDown(KeyCode.F))
+        //     ChangeState(GameStates.TicTacToe);
     }
 
     public void SubmitButtonPressed()
@@ -133,17 +133,17 @@ public class GameSystemManger : MonoBehaviour
 
         string msg;
 
-        if(createToggle.GetComponent<Toggle>().isOn)
-        msg = ClientToServerSignifiers.CreateAccount + "," + n + "," + p;
+        if (createToggle.GetComponent<Toggle>().isOn)
+            msg = ClientToServerSignifiers.CreateAccount + "," + n + "," + p;
         else
-        msg = ClientToServerSignifiers.Login + "," + n + "," + p;
+            msg = ClientToServerSignifiers.Login + "," + n + "," + p;
 
         networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(msg);
 
-        Debug.Log(msg); 
+        Debug.Log(msg);
 
         //ChangeState(GameStates.WaitingForMatch);
-        
+
     }
 
     private void LoginToggleChanged(bool newValue)
@@ -164,11 +164,11 @@ public class GameSystemManger : MonoBehaviour
 
     private void JoinGameRoomButtonPressed()
     {
-            Debug.Log("Joining Queue button pressed");
+        Debug.Log("Joining Queue button pressed");
         networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.JoinQueueForGameRoom + "");
-        
+
         ChangeState(GameStates.WaitingForMatch);
-        
+
     }
     private void TicTacToeSquareButtonPressed()
     {
@@ -177,31 +177,31 @@ public class GameSystemManger : MonoBehaviour
         ChangeState(GameStates.TicTacToe);
         // networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.JoinQueueForGameRoom + "");
         // ChangeState(GameStates.WaitingInQueueForOtherPlayer);
-        
+
     }
 
-    public void QuitButtonPressed() 
+    public void QuitButtonPressed()
     {
-        
+
         ChangeState(GameStates.Login);
     }
-    public void HelloCBPressed() 
+    public void HelloCBPressed()
     {
-        Debug.Log("Hello");
+        //Debug.Log("Hello");
         networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacToePlay + "Hello host");
-        
+
     }
 
-    public void GGCBPressed() 
+    public void GGCBPressed()
     {
-       networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacToePlay + "Good Game host");
-        Debug.Log("Good Game!");
-        
+        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacToePlay + "Good Game host");
+        //Debug.Log("Good Game!");
+
     }
 
     public void ReplayButtonPressed()
     {
-       boxScript.isMarked = false;
+        boxScript.isMarked = false;
     }
 
     public void ChangeState(int newState)
@@ -225,7 +225,7 @@ public class GameSystemManger : MonoBehaviour
         ReplayButton.SetActive(false);
 
 
-        if(newState == GameStates.Login)
+        if (newState == GameStates.Login)
         {
             Debug.Log("Login menu state");
 
@@ -237,38 +237,38 @@ public class GameSystemManger : MonoBehaviour
             menuCanvas.SetActive(true);
             textNameInfo.SetActive(true);
             textPasswordInfo.SetActive(true);
-            
+
         }
-        else if(newState == GameStates.MainMenu)
+        else if (newState == GameStates.MainMenu)
         {
             Debug.Log("Main menu state");
             quitButton.SetActive(true);
             joinGameRoomButton.SetActive(true);
             menuCanvas.SetActive(true);
         }
-        else if(newState == GameStates.WaitingForMatch)
+        else if (newState == GameStates.WaitingForMatch)
         {
-            
+
             Debug.Log("In Queue state");
             quitButton.SetActive(true);
             //joinGameRoomButton.SetActive(true);
-             
 
-            
-            
+
+
+
         }
-        else if(newState == GameStates.TicTacToe)
+        else if (newState == GameStates.TicTacToe)
         {
 
             Debug.Log("In Game state");
-            ticTacToeSquareButton.SetActive(true);
+            ticTacToeSquareButton.SetActive(false);
             quitButton.SetActive(true);
             board.SetActive(true);
-           box.SetActive(true);
+            box.SetActive(true);
             GGCB.SetActive(true);
             HelloCB.SetActive(true);
 
-           
+
             joinGameRoomButton.SetActive(false);
             submitButton.SetActive(false);
             userNameInput.SetActive(false);
@@ -279,10 +279,10 @@ public class GameSystemManger : MonoBehaviour
             textNameInfo.SetActive(false);
             textPasswordInfo.SetActive(false);
 
-         
+
         }
 
-        else if(newState == GameStates.OpponentPlay)
+        else if (newState == GameStates.OpponentPlay)
         {
             Debug.Log("opponent play state");
             ticTacToeSquareButton.SetActive(false);
@@ -293,22 +293,22 @@ public class GameSystemManger : MonoBehaviour
             GGCB.SetActive(true);
             HelloCB.SetActive(true);
 
-           
-           
+
+
         }
 
-        else if(newState == GameStates.Win)
+        else if (newState == GameStates.Win)
         {
-            
+
             quitButton.SetActive(true);
             board.SetActive(false);
             box.SetActive(false);
             GGCB.SetActive(true);
             HelloCB.SetActive(true);
             ReplayButton.SetActive(true);
-            
 
-           
+
+
             joinGameRoomButton.SetActive(false);
             submitButton.SetActive(false);
             userNameInput.SetActive(false);
@@ -322,15 +322,15 @@ public class GameSystemManger : MonoBehaviour
             joinGameRoomButton.SetActive(false);
             ticTacToeSquareButton.SetActive(false);
         }
-        
+
     }
 }
-     
-
-    
 
 
-    
+
+
+
+
 
 
 

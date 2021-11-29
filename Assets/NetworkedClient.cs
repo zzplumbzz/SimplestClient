@@ -20,7 +20,8 @@ public class NetworkedClient : MonoBehaviour
     int ourClientID;
 
     GameObject gameSystemManger;
-    
+    public Board boardScript;
+    public Box boxScript;
 
     // Start is called before the first frame update
     void Start()
@@ -28,11 +29,11 @@ public class NetworkedClient : MonoBehaviour
         Debug.Log("NetworkedClient start/ is connected");
         GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
 
-        foreach(GameObject go in allObjects)
+        foreach (GameObject go in allObjects)
         {
-            if(go.GetComponent<GameSystemManger>() != null)
+            if (go.GetComponent<GameSystemManger>() != null)
                 gameSystemManger = go;
-                
+
         }
 
         Connect();
@@ -41,7 +42,7 @@ public class NetworkedClient : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.S))
             SendMessageToHost("Hello from client");
 
         UpdateNetworkConnection();
@@ -77,7 +78,7 @@ public class NetworkedClient : MonoBehaviour
             }
         }
     }
-    
+
     private void Connect()
     {
         Debug.Log("Network client connect");
@@ -105,14 +106,16 @@ public class NetworkedClient : MonoBehaviour
             }
         }
     }
-    
+
     public void Disconnect()
-    {Debug.Log("Disconnected()");
+    {
+        Debug.Log("Disconnected()");
         NetworkTransport.Disconnect(hostID, connectionID, out error);
     }
-    
+
     public void SendMessageToHost(string msg)
-    {Debug.Log("Send message to host()");
+    {
+        Debug.Log("Send message to host()");
         byte[] buffer = Encoding.Unicode.GetBytes(msg);
         NetworkTransport.Send(hostID, connectionID, reliableChannelID, buffer, msg.Length * sizeof(char), out error);
     }
@@ -125,34 +128,39 @@ public class NetworkedClient : MonoBehaviour
 
         int signifier = int.Parse(csv[0]);
 
-        if(signifier == ServerToClientSignifiers.AccountCreationComplete)
+        if (signifier == ServerToClientSignifiers.AccountCreationComplete)
         {
             Debug.Log("Account creation complete NC");
             gameSystemManger.GetComponent<GameSystemManger>().ChangeState(GameStates.MainMenu);
         }
-        else if(signifier == ServerToClientSignifiers.LoginComplete)
+        else if (signifier == ServerToClientSignifiers.LoginComplete)
         {
             Debug.Log("Log Comp NC");
             gameSystemManger.GetComponent<GameSystemManger>().ChangeState(GameStates.MainMenu);
-            
+
         }
-        else if(signifier == ServerToClientSignifiers.GameStart)
+        else if (signifier == ServerToClientSignifiers.GameStart)
         {
             Debug.Log("GAME FINALLY STARTED!!!!!!!!!!!!!!!!!!!!!!!!");
             gameSystemManger.GetComponent<GameSystemManger>().ChangeState(GameStates.TicTacToe);
+            
         }
-        else if(signifier == ServerToClientSignifiers.OpponentPlay)
+        else if (signifier == ServerToClientSignifiers.OpponentPlay)
         {
-             Debug.Log("Opponent Play!");
+            Debug.Log("Opponent Play!");
+            boardScript.SwitchPlayer();
+            
+            //boardScript.
         }
 
-       
+
 
 
     }
 
     public bool IsConnected()
-    {Debug.Log("IS Connected NC");
+    {
+        Debug.Log("IS Connected NC");
         return isConnected;
     }
 
@@ -170,7 +178,7 @@ public static class ClientToServerSignifiers
 
     public const int TicTacToePlay = 4;
 
-    //public const int OpponentPlay = 5;
+    public const int MsgSentFromClientToClient = 5;
 
 
 }
@@ -178,23 +186,17 @@ public static class ClientToServerSignifiers
 public static class ServerToClientSignifiers
 {
     public const int LoginComplete = 11;
-     public const int LoginFailed = 12;
-    
+    public const int LoginFailed = 12;
+
 
     public const int AccountCreationComplete = 13;
     public const int AccountCreationFailed = 14;
 
-public const int OpponentPlay = 15;
-
-public const int GameStart = 16;
+    public const int OpponentPlay = 15;
+    public const int GameStart = 16;
+    public const int UpdateClientsBoard = 17;
 
 }
 
-// public static class LoginResponses
-// {
-//     public const int Success = 21;
-//      public const int FailureNameInuse = 22;
-//     public const int FailureNameNotFound = 23;
-//     public const int FailureIncorrectPassword = 24;
-// }
+
 
