@@ -178,9 +178,7 @@ public static class ClientToServerSignifiers
 
     public const int TicTacToePlay = 4;
 
-    public const int MsgSentFromClientToClient = 5;
-
-
+     public const int Win = 6;
 }
 
 public static class ServerToClientSignifiers
@@ -191,10 +189,13 @@ public static class ServerToClientSignifiers
 
     public const int AccountCreationComplete = 13;
     public const int AccountCreationFailed = 14;
-
-    public const int OpponentPlay = 15;
-    public const int GameStart = 16;
-    public const int UpdateClientsBoard = 17;
+    public const int GameStart = 15;
+    public const int PlayerTurn = 16;
+    public const int OpponentPlay = 17;
+    public const int UpdateClientsBoard = 18;
+    public const int SpectatorJoined = 19;
+    public const int SendMsgFromClientToOtherClient = 20;
+   
 
 }
 

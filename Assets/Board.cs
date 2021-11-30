@@ -6,7 +6,7 @@ using System.IO;
 public class Board : MonoBehaviour
 {
 
-    public NetworkedClient nc;
+    public NetworkedClient ncs;
     LinkedList<MovesDone> movesDone;
 
     const int AllMovesDone = 9;
@@ -29,7 +29,7 @@ public class Board : MonoBehaviour
     public Mark[] marks;
 
     private Camera cam;
-    private Mark currentMark;
+    public Mark currentMark;
 
     private void Start()
     {
@@ -66,11 +66,11 @@ public class Board : MonoBehaviour
             marks[box.index] = currentMark;
 
             box.SetAsMarked(GetSprite(), currentMark, GetColor());
-
+            //ncs.GetComponent<NetworkedClient>().SendMessageToHost(MovesDone);
             bool won = CheckIfWin();
             if(won)
             {
-                GSMScript.ChangeState(newState: 6);
+                
             
                 Debug.Log(currentMark.ToString() + "Wins");
                 
