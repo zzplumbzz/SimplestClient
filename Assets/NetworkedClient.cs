@@ -1,4 +1,4 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -143,6 +143,7 @@ public class NetworkedClient : MonoBehaviour
         {
             Debug.Log("GAME FINALLY STARTED!!!!!!!!!!!!!!!!!!!!!!!!");
             gameSystemManger.GetComponent<GameSystemManger>().ChangeState(GameStates.TicTacToe);
+            signifier = ServerToClientSignifiers.UpdateClientsBoard;
             
         }
         else if (signifier == ServerToClientSignifiers.OpponentPlay)

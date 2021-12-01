@@ -36,6 +36,9 @@ public class GameSystemManger : MonoBehaviour
 
     GameObject ReplayButton;
 
+    public string Hello;
+    public string GoodGame;
+
 
 
 
@@ -187,15 +190,16 @@ public class GameSystemManger : MonoBehaviour
     }
     public void HelloCBPressed()
     {
-        //Debug.Log("Hello");
-        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacToePlay + "Hello host");
-
+        Debug.Log("Hello");
+        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ServerToClientSignifiers.SendMsgFromClientToOtherClient + "Hello host" + Hello);
+        
     }
 
     public void GGCBPressed()
     {
-        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacToePlay + "Good Game host");
-        //Debug.Log("Good Game!");
+        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ServerToClientSignifiers.SendMsgFromClientToOtherClient + "Good Game host" + GoodGame);
+        
+        Debug.Log("Good Game!");
 
     }
 
@@ -251,7 +255,7 @@ public class GameSystemManger : MonoBehaviour
 
             Debug.Log("In Queue state");
             quitButton.SetActive(true);
-            //joinGameRoomButton.SetActive(true);
+            
 
 
 
