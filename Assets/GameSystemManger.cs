@@ -53,6 +53,7 @@ public class GameSystemManger : MonoBehaviour
 
         foreach (GameObject go in allObjects)
         {
+            //setting up all game objects in editor
             if (go.name == "UserNameInput")
                 userNameInput = go;
             else if (go.name == "PasswordInput")
@@ -91,17 +92,12 @@ public class GameSystemManger : MonoBehaviour
 
 
         }
-
+        //button listeners
         submitButton.GetComponent<Button>().onClick.AddListener(SubmitButtonPressed);
-
         loginToggle.GetComponent<Toggle>().onValueChanged.AddListener(LoginToggleChanged);
-
         createToggle.GetComponent<Toggle>().onValueChanged.AddListener(CreateToggleChanged);
-
         joinGameRoomButton.GetComponent<Button>().onClick.AddListener(JoinGameRoomButtonPressed);
-
         ticTacToeSquareButton.GetComponent<Button>().onClick.AddListener(TicTacToeSquareButtonPressed);
-
         quitButton.GetComponent<Button>().onClick.AddListener(QuitButtonPressed);
         HelloCB.GetComponent<Button>().onClick.AddListener(HelloCBPressed);
         GGCB.GetComponent<Button>().onClick.AddListener(GGCBPressed);
@@ -114,17 +110,7 @@ public class GameSystemManger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // if (Input.GetKeyDown(KeyCode.A))
-        //     ChangeState(GameStates.MainMenu);
-
-        // if (Input.GetKeyDown(KeyCode.S))
-        //     ChangeState(GameStates.Login);
-
-        // if (Input.GetKeyDown(KeyCode.D))
-        //     ChangeState(GameStates.WaitingForMatch);
-
-        // if (Input.GetKeyDown(KeyCode.F))
-        //     ChangeState(GameStates.TicTacToe);
+       
     }
 
     public void SubmitButtonPressed()
@@ -145,11 +131,9 @@ public class GameSystemManger : MonoBehaviour
 
         Debug.Log(msg);
 
-        //ChangeState(GameStates.WaitingForMatch);
-
     }
 
-    private void LoginToggleChanged(bool newValue)
+    private void LoginToggleChanged(bool newValue)// setting toggle on press and disabling the other toggle
     {
         Debug.Log("Login Toggle");
 
@@ -178,37 +162,36 @@ public class GameSystemManger : MonoBehaviour
         Debug.Log("Tic tac toe button pressed");
         networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacToePlay + "");
         ChangeState(GameStates.TicTacToe);
-        // networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.JoinQueueForGameRoom + "");
-        // ChangeState(GameStates.WaitingInQueueForOtherPlayer);
+        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ServerToClientSignifiers.UpdateClientsBoard + "");
 
     }
 
-    public void QuitButtonPressed()
+    public void QuitButtonPressed()// quits game back to login screen
     {
 
         ChangeState(GameStates.Login);
     }
-    public void HelloCBPressed()
+    public void HelloCBPressed()// when button pressed send to server to send to other client
     {
         Debug.Log("Hello");
-        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ServerToClientSignifiers.SendMsgFromClientToOtherClient + "Hello host" + Hello);
+        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.HelloButtonPressed + "Hello host" + Hello);
         
     }
 
-    public void GGCBPressed()
+    public void GGCBPressed()// when button pressed send to server to send to other client
     {
-        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ServerToClientSignifiers.SendMsgFromClientToOtherClient + "Good Game host" + GoodGame);
+        networkedClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.GGButtonPressed + "Good Game host" + GoodGame);
         
         Debug.Log("Good Game!");
 
     }
 
-    public void ReplayButtonPressed()
+    public void ReplayButtonPressed()// supposed to replay the game when complete
     {
-        boxScript.isMarked = false;
+        
     }
 
-    public void ChangeState(int newState)
+    public void ChangeState(int newState)// changing the different states
     {
         joinGameRoomButton.SetActive(false);
         submitButton.SetActive(false);

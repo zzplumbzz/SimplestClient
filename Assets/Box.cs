@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class Box : MonoBehaviour
 {
-
+GameObject networkedClient;
     public Board boardScript;
-    public GameSystemManger GSMScript;
+    GameObject gameSystemManger;
     public int index;
     public Mark mark;
     public bool isMarked;
 
     private SpriteRenderer spriteRenderer;
 
-    private void Awake()
+    private void Awake()// all boxes are unmarked on awake/ reset on awake
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -22,7 +22,7 @@ public class Box : MonoBehaviour
         isMarked = false;
     }
 
-    public void SetAsMarked(Sprite sprite, Mark mark, Color color)
+    public void SetAsMarked(Sprite sprite, Mark mark, Color color)// give the mark a sprite and color
     {
         isMarked = true;
         this.mark = mark;
@@ -32,19 +32,4 @@ public class Box : MonoBehaviour
 
         GetComponent<CircleCollider2D>().enabled = false;
     }
-
-    // public void SetAsUnMarked(Sprite sprite, Mark mark, Color color)
-    // {
-    //     isMarked = false;
-    //     this.mark = Mark.none;
-
-    //     // spriteRenderer.color = null;
-    //     spriteRenderer.sprite = null;
-
-    //     GetComponent<CircleCollider2D>().enabled = true;
-    // }
-
-    
-
-    
 }

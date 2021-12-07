@@ -5,13 +5,13 @@ using System.IO;
 
 public class Board : MonoBehaviour
 {
-
+GameObject networkedClient;
     public NetworkedClient ncs;
     LinkedList<MovesDone> movesDone;
 
     const int AllMovesDone = 9;
     string movesDoneFilePath;
-     public GameSystemManger GSMScript;
+     GameObject gameSystemManger;
      public Box box;
 
     [Header("Input Settings: ")]
@@ -31,7 +31,7 @@ public class Board : MonoBehaviour
     private Camera cam;
     public Mark currentMark;
 
-    private void Start()
+    private void Start()// on start try to save moves and start the game with x turn first
     {
         movesDoneFilePath = Application.dataPath + Path.DirectorySeparatorChar + "MovesDone.txt";
         cam = Camera.main;
@@ -41,7 +41,7 @@ public class Board : MonoBehaviour
         marks = new Mark[9];
     }
 
-    private void Update() 
+    private void Update() // update when a box has been clicked
     {
         if(Input.GetMouseButtonUp (0))
         {
@@ -59,14 +59,13 @@ public class Board : MonoBehaviour
         
     }
 
-    private void HitBox(Box box)
+    private void HitBox(Box box)// mark box and give it sprite and color and check if win
     {
         if(!box.isMarked)
         {
             marks[box.index] = currentMark;
 
             box.SetAsMarked(GetSprite(), currentMark, GetColor());
-            //ncs.GetComponent<NetworkedClient>().SendMessageToHost(MovesDone);
             bool won = CheckIfWin();
             if(won)
             {
@@ -84,7 +83,7 @@ public class Board : MonoBehaviour
 
    
 
-     public bool CheckIfWin()
+     public bool CheckIfWin()// all ways to win
     {
         return
         AreBoxesMatched(0, 1, 2) || AreBoxesMatched(3, 4, 5) || AreBoxesMatched(6, 7, 8) ||
@@ -92,7 +91,7 @@ public class Board : MonoBehaviour
         AreBoxesMatched(0, 4, 8) || AreBoxesMatched(2, 4, 6);
     }
 
-    private bool AreBoxesMatched(int i, int j, int k)
+    private bool AreBoxesMatched(int i, int j, int k)// check boxes for match
     {
         Mark m = currentMark;
         bool matched = (marks[i] == m && marks[j] == m && marks[k] == m);
@@ -145,41 +144,5 @@ public class Board : MonoBehaviour
             sw.Close();
     }
 
-    // public void LoadMovesDone()
-    //     {
-
-    //         if(File.Exists(movesDoneFilePath))
-    //         {
-
-            
-
-    //         StreamReader sr = new StreamReader(movesDoneFilePath);
-
-    //         string line;
-
-    //             while(true)
-    //             {
-    //                 line = sr.ReadLine();
-    //                 if(line == null)
-    //                 break;
-    //                 string[] csv = line.Split(',');
-
-    //                 int signifier = int.Parse(csv[0]);
-
-    //                 if(signifier == AllMovesDone)
-    //                 {
-    //                     MovesDone mo = new MovesDone();
-    //                     movesDone.AddLast(mo);
-    //                 }
-    //                 /*else if(signifier == )
-    //                 {
-                        
-    //                 }*/
-    //             }
-    //             sr.Close();
-    //         }
-
-    //     }
-
-
+   
 }
